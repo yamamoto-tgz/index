@@ -1,13 +1,12 @@
 package index.controller;
 
 import index.http.HttpRequest;
-import index.http.HttpRequests;
 import index.service.FormDataService;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 
 public final class CardController {
     private final FormDataService formDataService;
@@ -16,7 +15,7 @@ public final class CardController {
         this.formDataService = formDataService;
     }
 
-    public void process(HttpRequest request, OutputStream outputStream) throws IOException {
+    public void process(HttpRequest request, OutputStream outputStream) throws IOException, SQLException {
 
         if (request.getHeaders().getMethod().equals("POST"))
             formDataService.add(request.getFormDataList());

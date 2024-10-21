@@ -5,6 +5,7 @@ import index.http.HttpRequests;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.sql.SQLException;
 
 final class Server {
     private final Config config;
@@ -31,6 +32,8 @@ final class Server {
                             if (request.getHeaders().getUri().equals("/api/cards"))
                                 cardController.process(request, outputStream);
                         }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                     }
                 }
             }

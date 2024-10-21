@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.Properties;
 
 public final class Config {
-    private static final Properties props = new Properties();
+    private final Properties props = new Properties();
 
-    static {
+    {
         try {
             var classLoader = Server.class.getClassLoader();
             var inputStream = classLoader.getResourceAsStream("index.properties");
