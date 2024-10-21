@@ -27,9 +27,17 @@ public final class FormDataService {
 
         for (var formData : formDataList) {
             if (formData.getContentType() != null && formData.getContentType().equals("image/jpeg")) {
-                var filename = UUID.randomUUID() + ".jpg";
+                var uuid = UUID.randomUUID();
+                var filename = uuid + ".jpg";
                 var path = Paths.get(config.getProperty("index.image.dir"), filename);
+
                 Files.write(path, formData.getBody(), StandardOpenOption.CREATE);
+
+                if (formData.getName().equals("frontImages")) {
+                    card.getFrontImages().add(uuid.toString());
+                } else if (formData.getName().equals("backImages")) {
+                    card.getBackImages().add(uuid.toString());
+                }
 
             } else if (formData.getName().equals("frontText")) {
                 var frontText = new String(formData.getBody());
