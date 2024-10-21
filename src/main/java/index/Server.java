@@ -1,19 +1,18 @@
 package index;
 
+import index.controller.CardController;
 import index.http.HttpRequests;
-import index.service.FormDataService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.nio.charset.StandardCharsets;
 
 final class Server {
     private final Config config;
-    private final FormDataService formDataService;
+    private final CardController cardController;
 
-    Server(Config config, FormDataService imageService) {
+    Server(Config config, CardController cardController) {
         this.config = config;
-        this.formDataService = imageService;
+        this.cardController = cardController;
     }
 
     void start() {
@@ -28,18 +27,9 @@ final class Server {
                              var outputStream = clientSocket.getOutputStream()) {
 
                             var request = HttpRequests.read(inputStream);
-                            formDataService.add(request.getFormDataList());
 
-                            var response = """
-                                    HTTP/1.1 200
-                                    Server: index
-                                    Content-Type: text/html
-                                    Connection: closed
-                                    Content-Length: 12
-                                    
-                                    <p>HELLO</p>""";
-
-                            outputStream.write(response.getBytes(StandardCharsets.UTF_8));
+                            if (request.getHeaders().getUri().equals("/api/cards"))
+                                cardController.process(request, outputStream);
                         }
                     }
                 }
